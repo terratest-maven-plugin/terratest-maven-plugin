@@ -1,0 +1,21 @@
+version: 2.1
+
+orbs:
+  maven: circleci/maven@0.0.12
+
+jobs:
+ build:
+   machine: true
+   steps:
+     - checkout
+     - run:
+         name: Build
+         command: mvn clean install -U -DskipTests
+     - run:
+         name: Test
+         command: mvn test
+
+workflows:
+  maven_test:
+    jobs:
+      - build

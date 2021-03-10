@@ -1,0 +1,168 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.jinfra</groupId>
+    <artifactId>terratest-maven-plugin</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>maven-plugin</packaging>
+
+    <name>Terratest Maven plugin</name>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <jinfra.version>12bd6cf145</jinfra.version>
+        <junit.version>4.13.2</junit.version>
+
+        <!-- for unit and IT test running with maven respectively -->
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
+
+        <!-- "provided" dependencies for maven-plugin-testing-harness -->
+        <maven.harness.deps.version>3.2.5</maven.harness.deps.version>
+        <plexus-utils.version>3.0.15</plexus-utils.version>
+
+        <maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
+        <maven-project.version>2.2.1</maven-project.version>
+        <maven-plugin-testing-harness.version>3.3.0</maven-plugin-testing-harness.version>
+
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+
+        <!-- needed for maven-plugin-testing-harness -->
+        <!-- copied all the "Provided Dependencies" here
+         from: https://mvnrepository.com/artifact/org.apache.maven.plugin-testing/maven-plugin-testing-harness/3.3.0
+         as we use 3.3.0 from maven-plugin-testing-harness. There is some problem with this plugin,
+          so same so-called "provided" dependency is not really provided-->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>${maven.harness.deps.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-compat</artifactId>
+            <version>${maven.harness.deps.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>${maven.harness.deps.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${maven.harness.deps.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-aether-provider</artifactId>
+            <version>${maven.harness.deps.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>${plexus-utils.version}</version>
+        </dependency>
+        <!-- end of needed for maven-plugin-testing-harness -->
+
+        <!-- needed for IT test -->
+        <!-- https://cwiki.apache.org/confluence/display/MAVEN/Creating+a+Maven+Integration+Test -->
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-verifier</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <!-- end of needed for IT test -->
+
+        <!-- needed for @Mojo, @Parameter, etc.. annotations -->
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>${maven-plugin-plugin.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <!-- end of needed for @Mojo, @Parameter, etc.. annotations -->
+
+
+        <!-- needed for MavenProject class -->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>${maven-project.version}</version>
+        </dependency>
+        <!-- end of needed for MavenProject class -->
+
+        <!-- needed for unit testing -->
+
+        <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>${maven-plugin-testing-harness.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- end of needed for unit testing -->
+
+
+        <!-- dependency with https://jitpack.io -->
+        <dependency>
+            <groupId>com.github.szgergo.Jinfra</groupId>
+            <artifactId>common</artifactId>
+            <version>${jinfra.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>${maven-plugin-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/MavenIT*.java</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
