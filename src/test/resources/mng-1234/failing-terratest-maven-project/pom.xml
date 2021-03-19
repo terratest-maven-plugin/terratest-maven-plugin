@@ -2,10 +2,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.jinfra</groupId>
-    <artifactId>terratest-maven-plugin-dummy-maven-project</artifactId>
+    <artifactId>terratest-maven-plugin-failing-terratest-maven-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Terratest Maven plugin | DUMMY MAVEN PROJECT</name>
+    <name>Terratest Maven plugin | FAILING TERRATEST MAVEN PROJECT</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
