@@ -1,0 +1,33 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>terratest-maven-plugin-test-parent</artifactId>
+        <groupId>io.jinfra</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>terratest-maven-plugin-missing-dockerfile-maven-project</artifactId>
+
+    <name>Terratest Maven plugin | MISSING DOCKERFILE MAVEN PROJECT</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.jinfra</groupId>
+                <artifactId>terratest-maven-plugin</artifactId>
+                <configuration>
+                    <terraTestPath>${project.basedir}/docker-test</terraTestPath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run-tests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

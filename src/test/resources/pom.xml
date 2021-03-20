@@ -1,0 +1,29 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.jinfra</groupId>
+    <artifactId>terratest-maven-plugin-test-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Terratest Maven plugin | TERRATEST MAVEN PLUGIN TEST PARENT</name>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <terratest-maven-plugin.version>0.0.1-SNAPSHOT</terratest-maven-plugin.version>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.jinfra</groupId>
+                    <artifactId>terratest-maven-plugin</artifactId>
+                    <version>${terratest-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

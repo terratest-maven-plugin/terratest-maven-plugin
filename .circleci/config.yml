@@ -1,21 +1,74 @@
 version: 2.1
 
-orbs:
-  maven: circleci/maven@0.0.12
-
+commands:
+  install_dev_tools:
+    steps:
+      - run:
+          name: Install development dependencies
+          command: apt-get update && apt-get install -y --no-install-recommends curl gnupg lsb-release g++ gcc libc6-dev make pkg-config && rm -rf /var/lib/apt/lists/*
+  install_docker:
+    parameters:
+      docker_version:
+        description: Docker client version to install
+        type: string
+        default: 20.10.2
+    steps:
+      - setup_remote_docker:
+          version: << parameters.docker_version >>
+      - run:
+          name: Install docker repository
+          command: curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+      - run:
+          name: Setup stable docker repository
+          command: echo  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+      - run:
+          name: Update repository
+          command: apt-get update
+      - run:
+          name: Install docker client << parameters.docker_version >>
+          command: apt-get install -y docker-ce-cli=5:<< parameters.docker_version >>~3-0~debian-buster
+  install_go:
+    parameters:
+      go_version:
+        description: Go runtime version to install
+        type: string
+        default: 1.16.2
+    steps:
+      - run:
+          name: Add Go archive as environment variable
+          command: echo "export GOTAR=go<< parameters.go_version >>.linux-amd64.tar.gz" >> $BASH_ENV
+      - run:
+          name: Download go
+          command: curl -O https://dl.google.com/go/$GOTAR
+      - run:
+          name: Move go to official dir
+          command: tar xvf $GOTAR && rm -rf $GOTAR && chown -R root:root ./go && mv go /usr/local
+      - run:
+          name: Add go to PATH
+          command: echo "export PATH=/usr/local/go/bin:$PATH" >> $BASH_ENV
+      - run:
+          name: Refresh bash
+          command: source ~/.profile
 jobs:
- build:
-   machine: true
-   steps:
-     - checkout
-     - run:
-         name: Build
-         command: mvn clean install -U -DskipTests
-     - run:
-         name: Test
-         command: mvn test
+  test:
+    docker:
+      - image: maven:3.6.3-openjdk-11-slim
+    steps:
+      - install_dev_tools
+      - install_docker:
+            docker_version: 20.10.2
+      - install_go:
+            go_version: 1.16.2
+      - checkout
+      - run:
+          name: Test application
+          command: mvn clean install -U -DskipTests && mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install org.jacoco:jacoco-maven-plugin:report -U
+      - run:
+          name: Analyze on SonarCloud
+          command: mvn sonar:sonar -Dsonar.coverage.jacoco.xmlReportPaths=$(find "$(pwd)" -path '*jacoco.xml' | sed 's/.*/&/' | tr '\n' ',')
 
 workflows:
-  maven_test:
+  build_and_test:
     jobs:
-      - build
+      - test:
+          context: SonarCloud

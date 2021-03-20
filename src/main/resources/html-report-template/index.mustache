@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Terratest results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</head>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand d-inline-block p-2 mr-3" href="#" style="border-right: 4px solid #000000">Terratest results</a>
+        <span class="rounded-bottom d-inline-block p-2 mr-3"  style="background-color: #566e94; color: #ffffff">All: {{numberOfTests}} </span> <span class="rounded-bottom d-inline-block p-2 mr-3" style="background-color: #2bd659; color:#ffffff">Success: {{numberOfSuccessfulTests}} </span> <span class="rounded-bottom d-inline-block p-2 mr-3"  style="background-color: #d14538; color: #ffffff">Fail: {{numberOfFailedTests}} </span> <span class="rounded-bottom d-inline-block p-2 mr-3"  style="background-color: #566e94; color: #ffffff">Total time: {{totalElapsed}}s</span>
+    </nav>
+</header>
+<body>
+
+{{#goTests}}
+<div class="accordion" id="accordionExample">
+    <div class="card">
+        <div class="card-header task-header text-center text-white" id="heading{{name}}" style="background-color: {{#isSuccess}}#2bd659{{/isSuccess}}{{^isSuccess}}#d93523{{/isSuccess}};">
+            <h5 class="mb-0">
+                <button class="btn {{#isSuccess}}btn-success{{/isSuccess}}{{^isSuccess}}btn-danger{{/isSuccess}}" type="button" data-toggle="collapse" data-target="#collapse{{name}}" aria-expanded="true" aria-controls="collapse{{name}}">
+                    {{name}} ({{elapsed}}s)
+                </button>
+            </h5>
+        </div>
+
+        <div id="collapse{{name}}" class="collapse show" aria-labelledby="heading{{name}}" data-parent="#accordionExample">
+            <div class="card-body" style="height: 250px; overflow-y: scroll; background-color: #566e94;">
+            <p style="color: #ffffff">
+                {{#goTestLines}}
+                    {{output}}</br>
+                {{/goTestLines}}
+            </p>
+            </div>
+        </div>
+    </div>
+</div>
+{{/goTests}}
+</body>
+<footer class="page-footer font-small blue pt-4">
+    <div class="footer-copyright text-center py-3">Generated in:
+        <span class="footer-copyright text-center py-3 d-inline-block p-2 mr-3">{{generatedIn}} ms.</span>
+        <a class="footer-copyright text-center py-3 d-inline-block p-2 mr-3" href="#">Maven Terratest plugin</a>
+    </div>
+</footer>
+</html>
+
+
+
