@@ -2,10 +2,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.jinfra</groupId>
-    <artifactId>terratest-maven-plugin-saving-log-maven-project</artifactId>
+    <artifactId>terratest-maven-plugin-disable-test-caching-maven-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Terratest Maven plugin | SAVING LOG MAVEN PROJECT</name>
+    <name>Terratest Maven plugin | DISABLE TEST CACHING MAVEN PROJECT</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -40,7 +40,7 @@
                 <version>0.0.1-SNAPSHOT</version>
                 <configuration>
                     <relativePathToTerraTest>docker-test</relativePathToTerraTest>
-                    <createLogFile>true</createLogFile>
+                    <disableTestCaching>true</disableTestCaching>
                 </configuration>
                 <executions>
                     <execution>
