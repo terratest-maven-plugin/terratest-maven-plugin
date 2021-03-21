@@ -8,6 +8,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import java.time.Duration;
 import java.time.Instant;
 
+/**
+ * Compiles the terratests in {@link AbstractTerraTestMojo#getTerraTestPath()}
+ */
 @Mojo(name = "compile", defaultPhase = LifecyclePhase.COMPILE)
 public class TerraTestCompileMojo extends AbstractTerraTestMojo {
 

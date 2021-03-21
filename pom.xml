@@ -5,16 +5,63 @@
     <artifactId>terratest-maven-plugin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
-
+    <description>Plugin for running and compiling terratest (or any go) tests</description>
+    <url>https://github.com/terratest-maven-plugin</url>
     <name>Terratest Maven plugin</name>
+    <organization>
+        <name>terratest-maven-plugin</name>
+        <url>https://github.com/terratest-maven-plugin/</url>
+    </organization>
+
+    <inceptionYear>2021</inceptionYear>
+    <prerequisites>
+        <maven>3.0.0</maven>
+    </prerequisites>
+    <mailingLists>
+        <mailingList>
+            <name>Terratest maven plugin mailing list</name>
+            <subscribe>terratest.maven.plugin@gmail.com</subscribe>
+        </mailingList>
+    </mailingLists>
+    <issueManagement>
+        <url>https://github.com/terratest-maven-plugin/terratest-maven-plugin/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/terratest-maven-plugin/terratest-maven-plugin</url>
+        <connection>scm:git:git://github.com/terratest-maven-plugin/terratest-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:terratest-maven-plugin/terratest-maven-plugin.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <email>terratest.maven.plugin@gmail.com</email>
+            <name>Gergő Szabó</name>
+            <url>https://github.com/szgergo</url>
+            <id>szgergo</id>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://raw.githubusercontent.com/terratest-maven-plugin/terratest-maven-plugin/main/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <jinfra.version>12bd6cf145</jinfra.version>
         <junit.version>4.13.2</junit.version>
+        <commons-collections.version>4.4</commons-collections.version>
+        <maven-site-plugin.version>3.0</maven-site-plugin.version>
+        <htmlunit.version>2.48.0</htmlunit.version>
 
         <!-- for unit and IT test running with maven respectively -->
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
@@ -35,8 +82,7 @@
         <maven-pmd-plugin.version>3.14.0</maven-pmd-plugin.version>
         <spotbugs-maven-plugin.version>4.2.0</spotbugs-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
-        <maven-jxr-plugin.version>3.0</maven-jxr-plugin.version>
-
+        <maven-jxr-plugin.version>3.0.0</maven-jxr-plugin.version>
 
         <!-- sonarCloud integration -->
         <sonar.projectKey>szgergo_terratest-maven-plugin</sonar.projectKey>
@@ -44,9 +90,14 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.login>${env.SONAR_TOKEN}</sonar.login>
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
         <sonar.projectVersion>${project.version}</sonar.projectVersion>
 
+        <!-- generating javadoc and site -->
+        <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+        <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
     </properties>
 
     <repositories>
@@ -177,8 +228,12 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections.version}</version>
+        </dependency>
     </dependencies>
-
 
 
     <build>
@@ -187,11 +242,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>
-                <version>${maven-plugin-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -258,6 +308,42 @@
                         <phase>verify</phase>
                         <goals>
                             <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>${maven-plugin-plugin.version}</version>
+                <configuration>
+                    <goalPrefix>terratest</goalPrefix>
+                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>mojo-descriptor</id>
+                        <goals>
+                            <goal>descriptor</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>help-goal</id>
+                        <goals>
+                            <goal>helpmojo</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>

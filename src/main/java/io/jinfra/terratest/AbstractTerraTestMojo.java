@@ -12,11 +12,11 @@ public abstract class AbstractTerraTestMojo extends AbstractMojo {
      * Example:
      * <pre>
      * /-- example-maven-project
-     *         --> terratests/
-     *              --> ...
-     *         --> src/
-     *               --> ...
-     *         --> pom.xml
+     *         -- terratests/
+     *               ...
+     *         -- src/
+     *               ...
+     *         -- pom.xml
      *</pre>
      * In this example the value of ${@link AbstractTerraTestMojo#terraTestPath} should be <i>${project.basedir}/terratests</i>
      */
@@ -30,7 +30,7 @@ public abstract class AbstractTerraTestMojo extends AbstractMojo {
      * The logs will be saved to {@link AbstractTerraTestMojo#terraTestPath}
      * Log files will be named:
      * <ul>
-     *     <li>terratest-output.log</li>: The StdOut of go test
+     *     <li>terratest-output.log: The StdOut of go test</li>
      *     <li>terratest-error-output.log: The StdErr of go test</li>
      * </ul>
      */

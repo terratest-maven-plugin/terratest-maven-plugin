@@ -11,6 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Runs the terratests {@link AbstractTerraTestMojo#getTerraTestPath()}
+ */
 @Mojo(name = "run-tests", defaultPhase = LifecyclePhase.TEST)
 public class TerraTestRunnerMojo extends AbstractTerraTestMojo{
 

@@ -8,6 +8,7 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import io.jinfra.terratest.go.test.result.GoTest;
 import io.jinfra.terratest.go.test.result.GoTestLine;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -15,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HtmlReportGenerator {
 
@@ -83,22 +85,33 @@ public class HtmlReportGenerator {
 
         private final List<GoTest> goTests;
 
+        private final List<GoTest> successfulTests;
+
+        private final List<GoTest> failedTests;
+
         private final long numberOfTests;
 
         private final long numberOfSuccessfulTests;
 
         private final long numberOfFailedTests;
 
-        private final Double totalElapsed;
+        private final String totalElapsed;
 
         private final long generatedIn;
 
         public GoTestWrapper(List<GoTest> goTests, long generatedIn) {
             this.goTests = goTests;
+            this.successfulTests = goTests
+                    .stream()
+                    .filter(GoTest::isSuccess)
+                    .collect(Collectors.toList());
+            this.failedTests = new ArrayList<>(CollectionUtils.subtract(goTests,successfulTests));
             this.numberOfTests = goTests.size();
-            numberOfSuccessfulTests = goTests.stream().filter(GoTest::isSuccess).count();
+            this.numberOfSuccessfulTests = successfulTests.size();
             this.numberOfFailedTests = numberOfTests - numberOfSuccessfulTests;
-            this.totalElapsed = goTests.stream().mapToDouble(f -> f.getElapsed()).sum();
+            this.totalElapsed = String.format("%.2f", goTests.stream()
+                    .mapToDouble(f -> f.getElapsed())
+                    .sum());
             this.generatedIn = generatedIn;
         }
 
@@ -122,12 +135,20 @@ public class HtmlReportGenerator {
             return numberOfFailedTests;
         }
 
-        public Double getTotalElapsed() {
+        public String getTotalElapsed() {
             return totalElapsed;
         }
 
         public long getGeneratedIn() {
             return generatedIn;
+        }
+
+        public List<GoTest> getSuccessfulTests() {
+            return successfulTests;
+        }
+
+        public List<GoTest> getFailedTests() {
+            return failedTests;
         }
     }
 }
