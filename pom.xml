@@ -47,6 +47,7 @@
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.projectVersion>${project.version}</sonar.projectVersion>
 
+        <commons-collections.version>4.4</commons-collections.version>
     </properties>
 
     <repositories>
@@ -176,6 +177,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections.version}</version>
         </dependency>
     </dependencies>
 

@@ -1,47 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <title>Terratest results</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
 </head>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand d-inline-block p-2 mr-3" href="#" style="border-right: 4px solid #000000">Terratest results</a>
-        <span class="rounded-bottom d-inline-block p-2 mr-3"  style="background-color: #566e94; color: #ffffff">All: {{numberOfTests}} </span> <span class="rounded-bottom d-inline-block p-2 mr-3" style="background-color: #2bd659; color:#ffffff">Success: {{numberOfSuccessfulTests}} </span> <span class="rounded-bottom d-inline-block p-2 mr-3"  style="background-color: #d14538; color: #ffffff">Fail: {{numberOfFailedTests}} </span> <span class="rounded-bottom d-inline-block p-2 mr-3"  style="background-color: #566e94; color: #ffffff">Total time: {{totalElapsed}}s</span>
+        <a class="navbar-brand" href="#">Terratest results</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <button type="button" href="#allTests" data-toggle="collapse" class="btn btn-primary mr-3"
+                        onclick="$('#successfulTests').collapse('hide'); $('#failedTests').collapse('hide');">
+                    All: {{numberOfTests}}</button>
+                <button type="button" href="#successfulTests" data-toggle="collapse"
+                        class="btn btn-outline-success mr-3"
+                        onclick="$('#allTests').collapse('hide'); $('#failedTests').collapse('hide');">
+                    Successful: {{numberOfSuccessfulTests}}</button>
+                <button type="button" href="#failedTests" data-toggle="collapse" class="btn btn-outline-danger mr-3"
+                        onclick="$('#allTests').collapse('hide'); $('#successfulTests').collapse('hide');">
+                    Failed: {{numberOfFailedTests}}</button>
+            </ul>
+            <div class="my-2 my-lg-0">
+                <span class="nav-link" href="#">Total time: {{totalElapsed}}s</span>
+            </div>
+        </div>
     </nav>
 </header>
 <body>
-
-{{#goTests}}
-<div class="accordion" id="accordionExample">
-    <div class="card">
-        <div class="card-header task-header text-center text-white" id="heading{{name}}" style="background-color: {{#isSuccess}}#2bd659{{/isSuccess}}{{^isSuccess}}#d93523{{/isSuccess}};">
-            <h5 class="mb-0">
-                <button class="btn {{#isSuccess}}btn-success{{/isSuccess}}{{^isSuccess}}btn-danger{{/isSuccess}}" type="button" data-toggle="collapse" data-target="#collapse{{name}}" aria-expanded="true" aria-controls="collapse{{name}}">
-                    {{name}} ({{elapsed}}s)
-                </button>
-            </h5>
-        </div>
-
-        <div id="collapse{{name}}" class="collapse show" aria-labelledby="heading{{name}}" data-parent="#accordionExample">
-            <div class="card-body" style="height: 250px; overflow-y: scroll; background-color: #566e94;">
-            <p style="color: #ffffff">
-                {{#goTestLines}}
-                    {{output}}</br>
-                {{/goTestLines}}
-            </p>
+<div class="container">
+    <div class="accordion collapse" id="allTests">
+        {{#goTests}}
+            <div class="card">
+                <div class="card-header task-header text-center text-white" id="heading{{name}}">
+                    <h5 class="mb-0">
+                        <button class="btn {{#isSuccess}}btn-outline-success{{/isSuccess}}{{^isSuccess}}btn-outline-danger{{/isSuccess}}"
+                                type="button" data-toggle="collapse" data-target="#collapse{{name}}"
+                                aria-expanded="true" aria-controls="collapse{{name}}">
+                            {{name}} ({{elapsed}}s)
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapse{{name}}" class="collapse" aria-labelledby="heading{{name}}"
+                     data-parent="#allTests">
+                    <div class="card-body" style="height: 250px; overflow-y: scroll; background-color: #566e94;">
+                        <span class="text-white">
+                            {{#goTestLines}}
+                                {{output}}<br>
+                            {{/goTestLines}}
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
+        {{/goTests}}
+    </div>
+
+
+    <div class="accordion collapse" id="successfulTests">
+        {{#successfulTests}}
+            <div class="card">
+                <div class="card-header task-header text-center text-white" id="heading{{name}}">
+                    <h5 class="mb-0">
+                        <button class="btn {{#isSuccess}}btn-outline-success{{/isSuccess}}{{^isSuccess}}btn-outline-danger{{/isSuccess}}"
+                                type="button" data-toggle="collapse" data-target="#collapse{{name}}"
+                                aria-expanded="true" aria-controls="collapse{{name}}">
+                            {{name}} ({{elapsed}}s)
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapse{{name}}" class="collapse" aria-labelledby="heading{{name}}"
+                     data-parent="#successfulTests">
+                    <div class="card-body" style="height: 250px; overflow-y: scroll; background-color: #566e94;">
+                     <span class="text-white">
+                         {{#goTestLines}}
+                             {{output}}<br>
+                         {{/goTestLines}}
+                     </span>
+                    </div>
+                </div>
+            </div>
+        {{/successfulTests}}
+    </div>
+
+    <div class="accordion collapse" id="failedTests">
+        {{#failedTests}}
+            <div class="card">
+                <div class="card-header task-header text-center text-white" id="heading{{name}}">
+                    <h5 class="mb-0">
+                        <button class="btn {{#isSuccess}}btn-outline-success{{/isSuccess}}{{^isSuccess}}btn-outline-danger{{/isSuccess}}"
+                                type="button" data-toggle="collapse" data-target="#collapse{{name}}"
+                                aria-expanded="true" aria-controls="collapse{{name}}">
+                            {{name}} ({{elapsed}}s)
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapse{{name}}" class="collapse" aria-labelledby="heading{{name}}"
+                     data-parent="#failedTests">
+                    <div class="card-body" style="height: 250px; overflow-y: scroll; background-color: #566e94;">
+                     <span class="text-white">
+                         {{#goTestLines}}
+                             {{output}}<br>
+                         {{/goTestLines}}
+                     </span>
+                    </div>
+                </div>
+            </div>
+        {{/failedTests}}
     </div>
 </div>
-{{/goTests}}
 </body>
 <footer class="page-footer font-small blue pt-4">
     <div class="footer-copyright text-center py-3">Generated in:
