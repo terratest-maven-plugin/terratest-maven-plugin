@@ -3,7 +3,7 @@
 
     <groupId>com.github.terratest-maven-plugin</groupId>
     <artifactId>terratest-maven-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <description>Plugin for running and compiling terratest (or any go) tests</description>
     <url>https://github.com/terratest-maven-plugin</url>
@@ -34,7 +34,7 @@
         <url>https://github.com/terratest-maven-plugin/terratest-maven-plugin</url>
         <connection>scm:git:git://github.com/terratest-maven-plugin/terratest-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:terratest-maven-plugin/terratest-maven-plugin.git</developerConnection>
-      <tag>release/1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <developers>
