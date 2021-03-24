@@ -1,9 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.terratest-maven-plugin</groupId>
     <artifactId>terratest-maven-plugin</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <description>Plugin for running and compiling terratest (or any go) tests</description>
     <url>https://github.com/terratest-maven-plugin</url>
@@ -34,8 +34,7 @@
         <url>https://github.com/terratest-maven-plugin/terratest-maven-plugin</url>
         <connection>scm:git:git://github.com/terratest-maven-plugin/terratest-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:terratest-maven-plugin/terratest-maven-plugin.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <developers>
         <developer>
