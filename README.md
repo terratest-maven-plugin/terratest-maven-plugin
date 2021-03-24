@@ -66,7 +66,7 @@ This will generate an <code>terratest-output.log</code> and an <code>terratest-e
 <i>Only used in run-tests goal</i><br>
 You can have an HTML report about your test results into your <code>terraTestPath</code> directory as <code>index.html</code>.
 
-![HTML report example](https://media.giphy.com/media/QbvoQSpDIZgR76DNyz/giphy.gif)
+![HTML report example](https://media.giphy.com/media/HFqwy9gcMI4zltC65u/giphy.gif)
 <br>Use the following parameter:
 
     <configuration>

@@ -1,11 +1,11 @@
-package io.jinfra.terratest.tests;
+package com.github.terratest.maven.plugin.tests;
 
-import io.jinfra.terratest.tests.utils.TestResource;
+import com.github.terratest.maven.plugin.tests.utils.TestResource;
 import org.junit.Test;
 
 import java.io.File;
 
-import static io.jinfra.terratest.tests.utils.VerificationRunner.*;
+import static com.github.terratest.maven.plugin.tests.utils.VerificationRunner.*;
 
 public class TerraTestRunnerMojoIT {
 

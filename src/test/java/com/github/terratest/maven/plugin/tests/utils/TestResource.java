@@ -1,6 +1,6 @@
-package io.jinfra.terratest.tests.utils;
+package com.github.terratest.maven.plugin.tests.utils;
 
-import static io.jinfra.terratest.tests.utils.TestFixture.TERRA_TEST_RUNNER_MOJO_TEST_FIXTURE;
+import static com.github.terratest.maven.plugin.tests.utils.TestFixture.TERRA_TEST_RUNNER_MOJO_TEST_FIXTURE;
 
 public enum TestResource {
 

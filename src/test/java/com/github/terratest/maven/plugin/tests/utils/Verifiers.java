@@ -1,4 +1,4 @@
-package io.jinfra.terratest.tests.utils;
+package com.github.terratest.maven.plugin.tests.utils;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;

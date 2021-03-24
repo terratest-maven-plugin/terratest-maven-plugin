@@ -1,4 +1,4 @@
-package io.jinfra.terratest.tests.utils;
+package com.github.terratest.maven.plugin.tests.utils;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
@@ -11,8 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static io.jinfra.terratest.tests.utils.ApplicationTestConstant.*;
-import static io.jinfra.terratest.tests.utils.Verifiers.*;
 import static org.junit.Assert.*;
 
 public class VerificationRunner {
@@ -38,12 +36,12 @@ public class VerificationRunner {
 
             final String dirName = testDir.getName();
 
-            final String fullName = TERRATEST_MAVEN_PLUGIN_BASE_NAME + dirName;
+            final String fullName = ApplicationTestConstant.TERRATEST_MAVEN_PLUGIN_BASE_NAME + dirName;
 
-            verifier.deleteArtifact(TERRATEST_MAVEN_PLUGIN_BASE_PACKAGE + fullName, fullName + "-" + PLUGIN_VERSION, PLUGIN_VERSION, "jar");
-            verifier.deleteArtifact(TERRATEST_MAVEN_PLUGIN_BASE_PACKAGE + fullName, fullName + "-" + PLUGIN_VERSION, PLUGIN_VERSION, "pom");
-            verifier.deleteArtifact(TERRATEST_MAVEN_PLUGIN_BASE_PACKAGE + fullName, "maven-metadata-local", PLUGIN_VERSION, "xml");
-            verifier.deleteArtifact(TERRATEST_MAVEN_PLUGIN_BASE_PACKAGE + fullName, "_remote", PLUGIN_VERSION, ".repositories");
+            verifier.deleteArtifact(ApplicationTestConstant.TERRATEST_MAVEN_PLUGIN_BASE_PACKAGE + fullName, fullName + "-" + ApplicationTestConstant.PLUGIN_VERSION, ApplicationTestConstant.PLUGIN_VERSION, "jar");
+            verifier.deleteArtifact(ApplicationTestConstant.TERRATEST_MAVEN_PLUGIN_BASE_PACKAGE + fullName, fullName + "-" + ApplicationTestConstant.PLUGIN_VERSION, ApplicationTestConstant.PLUGIN_VERSION, "pom");
+            verifier.deleteArtifact(ApplicationTestConstant.TERRATEST_MAVEN_PLUGIN_BASE_PACKAGE + fullName, "maven-metadata-local", ApplicationTestConstant.PLUGIN_VERSION, "xml");
+            verifier.deleteArtifact(ApplicationTestConstant.TERRATEST_MAVEN_PLUGIN_BASE_PACKAGE + fullName, "_remote", ApplicationTestConstant.PLUGIN_VERSION, ".repositories");
 
             /*
              * The Command Line Options (CLI) are passed to the
@@ -110,23 +108,23 @@ public class VerificationRunner {
     }
 
     public static void assertNoErrorHasBeenReported(File testDir) {
-        runVerification(testDir, NO_ERROR_VERIFIER);
+        runVerification(testDir, Verifiers.NO_ERROR_VERIFIER);
     }
 
     public static void assertNoGoFileToTestIsPresent(File testDir) {
-        runVerification(testDir, NO_GO_FILE_PRESENT);
+        runVerification(testDir, Verifiers.NO_GO_FILE_PRESENT);
     }
 
     public static void assertTerraTestFailing(File testDir) {
-        runVerification(testDir, FAILED_TERRATEST);
+        runVerification(testDir, Verifiers.FAILED_TERRATEST);
     }
 
     public static void assertMissingDockerfile(File testDir) {
-        runVerification(testDir, NO_DOCKER_FILE);
+        runVerification(testDir, Verifiers.NO_DOCKER_FILE);
     }
 
     public static void assertTestLogsHaveBeenCreated(File testDir, String terraTestDir) {
-        runVerification(testDir,wrapper((Verifier verifier) -> {
+        runVerification(testDir, Verifiers.wrapper((Verifier verifier) -> {
             final String testMavenProjectTerraTestDir = String.join(File.separator,
                     testDir.getParent(),
                     testDir.getName(),
@@ -134,15 +132,15 @@ public class VerificationRunner {
             verifier.verifyErrorFreeLog();
             verifier.assertFilePresent(String.join(File.separator,
                     testMavenProjectTerraTestDir,
-                    OUTPUT_LOG));
+                    ApplicationTestConstant.OUTPUT_LOG));
             verifier.assertFilePresent(String.join(File.separator,
                     testMavenProjectTerraTestDir,
-                    ERROR_OUTPUT_LOG));
+                    ApplicationTestConstant.ERROR_OUTPUT_LOG));
         }) );
     }
 
     public static void assertHtmlReportHasBeenCreatedSuccessfulTests(File testDir, String terraTestDir) {
-        runVerification(testDir,wrapper((Verifier verifier) -> {
+        runVerification(testDir, Verifiers.wrapper((Verifier verifier) -> {
             final String testMavenProjectTerraTestDir = String.join(File.separator,
                     testDir.getParent(),
                     testDir.getName(),
@@ -150,20 +148,20 @@ public class VerificationRunner {
             verifier.verifyErrorFreeLog();
             verifier.assertFilePresent(String.join(File.separator,
                     testMavenProjectTerraTestDir,
-                    GENERATED_HTML_REPORT));
+                    ApplicationTestConstant.GENERATED_HTML_REPORT));
         }) );
     }
 
     public static void assertHtmlReportHasBeenCreatedFailedTests(File testDir, String terraTestDir) {
-        runVerification(testDir,wrapper((Verifier verifier) -> {
+        runVerification(testDir, Verifiers.wrapper((Verifier verifier) -> {
             final String testMavenProjectTerraTestDir = String.join(File.separator,
                     testDir.getParent(),
                     testDir.getName(),
                     terraTestDir);
-            FAILED_TERRATEST.accept(verifier);
+            Verifiers.FAILED_TERRATEST.accept(verifier);
             verifier.assertFilePresent(String.join(File.separator,
                     testMavenProjectTerraTestDir,
-                    GENERATED_HTML_REPORT));
+                    ApplicationTestConstant.GENERATED_HTML_REPORT));
         }) );
     }
 }

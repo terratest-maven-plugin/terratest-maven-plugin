@@ -1,4 +1,4 @@
-package io.jinfra.terratest.go.test.result;
+package com.github.terratest.maven.plugin.go.test.result;
 
 import com.google.common.collect.Lists;
 

@@ -3,7 +3,7 @@
 
     <parent>
         <artifactId>terratest-maven-plugin-test-parent</artifactId>
-        <groupId>io.jinfra</groupId>
+        <groupId>com.github.terratest-maven-plugin</groupId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
@@ -15,8 +15,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>io.jinfra</groupId>
+                <groupId>com.github.terratest-maven-plugin</groupId>
                 <artifactId>terratest-maven-plugin</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
                 <configuration>
                     <terraTestPath>${project.baseDir}/docker-test</terraTestPath>
                 </configuration>

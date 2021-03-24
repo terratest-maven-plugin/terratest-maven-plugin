@@ -1,13 +1,12 @@
-package io.jinfra.terratest.tests;
+package com.github.terratest.maven.plugin.tests;
 
-import io.jinfra.terratest.TerraTestRunnerMojo;
-import io.jinfra.terratest.tests.utils.TestResource;
+import com.github.terratest.maven.plugin.TerraTestRunnerMojo;
+import com.github.terratest.maven.plugin.tests.utils.ApplicationTestConstant;
+import com.github.terratest.maven.plugin.tests.utils.TestResource;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Test;
 
 import java.io.File;
-
-import static io.jinfra.terratest.tests.utils.ApplicationTestConstant.TEST_RESOURCES_BASE_DIR;
 
 public class TerraTestRunnerMojoUTest extends AbstractMojoTestCase {
 
@@ -25,7 +24,7 @@ public class TerraTestRunnerMojoUTest extends AbstractMojoTestCase {
     public void testNoTerraTest() throws Exception {
         final TestResource testResource = TestResource.BASIC_TEST_UNIT;
         File file = new File(String.join(File.separator,
-                TEST_RESOURCES_BASE_DIR,
+                ApplicationTestConstant.TEST_RESOURCES_BASE_DIR,
                 testResource.getTestFixture(),
                 testResource.getMavenProject(),
                 "pom.xml"));

@@ -1,4 +1,4 @@
-package io.jinfra.terratest;
+package com.github.terratest.maven.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -6,8 +6,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import io.jinfra.terratest.go.test.result.GoTest;
-import io.jinfra.terratest.go.test.result.GoTestLine;
+import com.github.terratest.maven.plugin.go.test.result.GoTest;
+import com.github.terratest.maven.plugin.go.test.result.GoTestLine;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 

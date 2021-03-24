@@ -1,4 +1,4 @@
-package io.jinfra.terratest;
+package com.github.terratest.maven.plugin;
 
 import io.jinfra.testing.CommandResponse;
 import io.jinfra.testing.ProcessRunner;

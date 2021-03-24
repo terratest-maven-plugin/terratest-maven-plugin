@@ -1,4 +1,4 @@
-package io.jinfra.terratest;
+package com.github.terratest.maven.plugin;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
