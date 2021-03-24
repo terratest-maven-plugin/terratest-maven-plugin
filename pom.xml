@@ -17,12 +17,14 @@
     <prerequisites>
         <maven>3.0.0</maven>
     </prerequisites>
+
     <mailingLists>
         <mailingList>
             <name>Terratest maven plugin mailing list</name>
             <subscribe>terratest.maven.plugin@gmail.com</subscribe>
         </mailingList>
     </mailingLists>
+
     <issueManagement>
         <url>https://github.com/terratest-maven-plugin/terratest-maven-plugin/issues</url>
         <system>GitHub Issues</system>
@@ -335,6 +337,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -342,6 +345,19 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>

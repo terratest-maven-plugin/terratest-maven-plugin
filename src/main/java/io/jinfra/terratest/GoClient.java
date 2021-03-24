@@ -14,6 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Abstraction over the Go client.
+ */
 public class GoClient {
 
     private final String terraTestsPath;
@@ -40,6 +43,10 @@ public class GoClient {
         this.arguments = arguments;
     }
 
+    /**
+     * Checks whether the go runtime is present on the machine.
+     * @throws MojoExecutionException If go runtime is not found.
+     */
     public void checkGoPresence() throws MojoExecutionException {
         Optional<CommandResponse> maybeCommandResponse
                 = ProcessRunner.runCommand(createCommandList("go", "version"));
@@ -55,6 +62,11 @@ public class GoClient {
         }
     }
 
+    /**
+     * Runs the go test command with the params got from {@link GoClientBuilder}
+     * @throws MojoFailureException If test running has failed
+     * @throws IOException If log files or the HTML report can't be generated.
+     */
     public void runGoTest() throws MojoFailureException, IOException {
         final List<String> goTestCommand = createCommandList("go","test","-v");
 
@@ -102,6 +114,11 @@ public class GoClient {
         }
     }
 
+    /**
+     * Compiles the go tests in the {@link AbstractTerraTestMojo#getTerraTestPath()} directory
+     * @throws MojoExecutionException If could not get the {@link CommandResponse}
+     * @throws MojoFailureException If the compilation of tests resulted in error
+     */
     public void compileGoTests() throws MojoExecutionException, MojoFailureException {
         final List<String> goTestCommand = createCommandList("go","test","-c");
         addExtraArguments(goTestCommand);
@@ -153,6 +170,9 @@ public class GoClient {
     }
 
 
+    /**
+     * Builder class for the GoClient.
+     */
     public static class GoClientBuilder {
 
         private String terraTestsPath;
@@ -165,10 +185,20 @@ public class GoClient {
 
         private GoClientBuilder() {}
 
+        /**
+         * Returns an empty builder
+         * @return {@link GoClientBuilder}
+         */
         public static GoClientBuilder newBuilder() {
             return new GoClientBuilder();
         }
 
+        /**
+         * Sets the {@link AbstractTerraTestMojo#getTerraTestPath()} path where the go tests reside.
+         * This is a mandatory field.
+         * @param terraTestsPath The absolute path where the go tests are.
+         * @return {@link GoClientBuilder}
+         */
         public GoClientBuilder withTerraTestPath(final String terraTestsPath) {
             if(!Paths.get(terraTestsPath).isAbsolute()) {
                 throw new IllegalArgumentException("terraTestPath mus be absolute");
@@ -177,6 +207,11 @@ public class GoClient {
             return this;
         }
 
+        /**
+         * Sets the logger for the GoClient. This is a mandatory field.
+         * @param logger The logger to use. Type must be {@link Log}
+         * @return {@link GoClientBuilder} An intermediate GoClientBuilder
+         */
         public GoClientBuilder withLogger(final Log logger) {
             if(logger == null) {
                 throw new IllegalArgumentException("Logger can't be null");
@@ -185,11 +220,23 @@ public class GoClient {
             return this;
         }
 
+        /**
+         * Whether or not use the -jsonOutput argument of go test
+         * @see <a href="https://golang.org/pkg/cmd/go/internal/test/">Go Test reference</a>
+         * @param useJsonOutput Boolean for setting the <code>-jsonOutput</code> parameter for go test
+         * @return {@link GoClientBuilder} An intermediate GoClientBuilder
+         */
         public GoClientBuilder useJsonOutput(final boolean useJsonOutput) {
            this.useJsonOutput = useJsonOutput;
             return this;
         }
 
+        /**
+         * Whether or not generate an HTML report of the test results in the
+         * {@link AbstractTerraTestMojo#getTerraTestPath()} directory.
+         * @param generateHtmlReport Boolean for generating HTML report from the go test results. If this is true, <code>useJsonOutput</code> will be set to true automatically.
+         * @return {@link GoClientBuilder} An intermediate GoClientBuilder
+         */
         public GoClientBuilder generateHtmlReport(final boolean generateHtmlReport) {
             this.generateHtmlReport = generateHtmlReport;
             if(generateHtmlReport) {
@@ -198,16 +245,34 @@ public class GoClient {
             return this;
         }
 
+        /**
+         * Whether or not disable go test's caching mechanism
+         * @see <a href="https://golang.org/pkg/cmd/go/internal/test/">Go Test reference</a>
+         * @param disableTestCaching Boolean for disabling go test's caching mechanism
+         * @return {@link GoClientBuilder} An intermediate GoClientBuilder
+         */
         public GoClientBuilder disableCaching(final boolean disableTestCaching) {
             this.disableTestCaching = disableTestCaching;
             return this;
         }
 
+        /**
+         * Whether or not generate log files inside {@link AbstractTerraTestMojo#getTerraTestPath()} directory
+         * containing the stdOut and stdErr of go test
+         * @param createLogFile Boolean for setting whether generate log files or not
+         * @return {@link GoClientBuilder} An intermediate GoClientBuilder
+         */
         public GoClientBuilder createLogFile(final boolean createLogFile) {
             this.createLogFile = createLogFile;
             return this;
         }
 
+        /**
+         * List of any additional arguments wished to be passed to the go runtime.
+         * For more Go arguments, @see <a href="https://golang.org/pkg/cmd/go/internal/test/">Go Test reference</a>
+         * @param arguments Additional arguments for go test to be passed.
+         * @return {@link GoClientBuilder} An intermediate GoClientBuilder
+         */
         public GoClientBuilder withArguments(final List<String> arguments) {
             this.arguments = new ArrayList<>();
             if(arguments != null) {
@@ -216,6 +281,11 @@ public class GoClient {
             return this;
         }
 
+        /**
+         * Check if <code>generateHtmlReport</code> is true and if so, it sets <code>useJsonOutput</code> to true also.
+         * Checks if either <code>logger</code> or <code>terraTestsPath</code> is null, if so the builder throws an {@link IllegalStateException}
+         * @return Fully built {@link GoClient} instance.
+         */
         public GoClient build() {
             if(logger == null || terraTestsPath == null) {
                 throw new IllegalStateException("Neither logger nor terraTestPath can be null!");

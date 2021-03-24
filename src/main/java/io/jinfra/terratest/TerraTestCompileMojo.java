@@ -17,6 +17,7 @@ public class TerraTestCompileMojo extends AbstractTerraTestMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         GoClient goClient = GoClient.GoClientBuilder.newBuilder()
+                .useJsonOutput(isUseJsonOutput())
                 .createLogFile(isCreateLogFile())
                 .withTerraTestPath(getTerraTestPath())
                 .withArguments(getArguments())

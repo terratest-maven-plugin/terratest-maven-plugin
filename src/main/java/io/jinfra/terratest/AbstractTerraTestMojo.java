@@ -5,6 +5,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.util.List;
 
+/**
+ * Containing all the common parameters used by all mojos:
+ * {@link TerraTestCompileMojo}
+ * {@link TerraTestRunnerMojo}
+ */
 public abstract class AbstractTerraTestMojo extends AbstractMojo {
 
     /**
@@ -44,6 +49,13 @@ public abstract class AbstractTerraTestMojo extends AbstractMojo {
     @Parameter(property = "terratest.arguments")
     private List<String> arguments;
 
+    /**
+     * Enables json output for go test
+     * @see <a href="https://golang.org/pkg/cmd/go/internal/test/">Go Test reference</a>
+     */
+    @Parameter(defaultValue = "false", property = "terratest.useJsonOutput")
+    private boolean useJsonOutput;
+
     public String getTerraTestPath() {
         return terraTestPath;
     }
@@ -54,5 +66,9 @@ public abstract class AbstractTerraTestMojo extends AbstractMojo {
 
     public List<String> getArguments() {
         return arguments;
+    }
+
+    public boolean isUseJsonOutput() {
+        return useJsonOutput;
     }
 }

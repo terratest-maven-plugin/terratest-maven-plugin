@@ -24,6 +24,11 @@ public class HtmlReportGenerator {
 
     private static final String HTML_TEMPLATE_PATH = "html-report-template";
 
+    private static final MustacheFactory MUSTACHE_FACTORY = new DefaultMustacheFactory();
+    private static final String TEMPLATE_FILE = "index.mustache";
+
+    private HtmlReportGenerator() {}
+
     static {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModules(new JavaTimeModule());
@@ -46,19 +51,15 @@ public class HtmlReportGenerator {
         for (String goTestResult : lines) {
             GoTestLine goTestLine = OBJECT_READER.readValue(goTestResult, GoTestLine.class);
 
-            //TODO: Try to rework this.
             final String testName = goTestLine.getTest();
             if (testName == null) {
                 continue;
             }
-            if (rawGoTests.containsKey(testName)) {
-                List<GoTestLine> linesForTest = rawGoTests.get(testName);
-                linesForTest.add(goTestLine);
-            } else {
-                List<GoTestLine> linesForTest = new ArrayList<>();
-                linesForTest.add(goTestLine);
-                rawGoTests.put(testName, linesForTest);
+            if (!rawGoTests.containsKey(testName)) {
+                rawGoTests.put(testName, new ArrayList<>());
+
             }
+            rawGoTests.get(testName).add(goTestLine);
         }
 
         List<GoTest> goTests = new ArrayList<>();
@@ -67,9 +68,8 @@ public class HtmlReportGenerator {
             goTests.add(goTest);
         }
 
-
-        MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache mustache = mf.compile(HTML_TEMPLATE_PATH + File.separator + "index.mustache");
+        Mustache mustache = MUSTACHE_FACTORY
+                .compile(HTML_TEMPLATE_PATH + File.separator + TEMPLATE_FILE);
         Instant end = Instant.now();
 
 
@@ -110,7 +110,7 @@ public class HtmlReportGenerator {
             this.numberOfSuccessfulTests = successfulTests.size();
             this.numberOfFailedTests = numberOfTests - numberOfSuccessfulTests;
             this.totalElapsed = String.format("%.2f", goTests.stream()
-                    .mapToDouble(f -> f.getElapsed())
+                    .mapToDouble(GoTest::getElapsed)
                     .sum());
             this.generatedIn = generatedIn;
         }

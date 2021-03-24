@@ -18,14 +18,6 @@ import java.util.List;
 public class TerraTestRunnerMojo extends AbstractTerraTestMojo{
 
     /**
-     * Enables json output for go test
-     * If ${@link TerraTestRunnerMojo#generateHtmlReport} is set to true this will be used too.
-     * @see <a href="https://golang.org/pkg/cmd/go/internal/test/">Go Test reference</a>
-     */
-    @Parameter(defaultValue = "false", property = "terratest.useJsonOutput")
-    private boolean useJsonOutput;
-
-    /**
      * Extra arguments to pass to go test.
      * @see <a href="https://golang.org/pkg/cmd/go/internal/test/">Go Test reference</a>
      */
@@ -41,7 +33,7 @@ public class TerraTestRunnerMojo extends AbstractTerraTestMojo{
 
     /**
      * Generated test report as HTML into {@link AbstractTerraTestMojo#getTerraTestPath()}
-     * If this field is set to true {@link TerraTestRunnerMojo#useJsonOutput}
+     * If this field is set to true {@link TerraTestRunnerMojo#isUseJsonOutput()}
      * will be set true automatically.
      */
     @Parameter(defaultValue = "false", property = "terratest.generateHtmlReport")
@@ -56,7 +48,7 @@ public class TerraTestRunnerMojo extends AbstractTerraTestMojo{
             return;
         }
         GoClient goClient = GoClient.GoClientBuilder.newBuilder()
-                .useJsonOutput(useJsonOutput)
+                .useJsonOutput(isUseJsonOutput())
                 .createLogFile(isCreateLogFile())
                 .disableCaching(disableTestCaching)
                 .withTerraTestPath(getTerraTestPath())
