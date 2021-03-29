@@ -78,6 +78,7 @@ public class GoRunner {
         GoClient.GoClientBuilder goClientBuilder = GoClient
                 .GoClientBuilder
                 .newBuilder(terraTestsPath)
+                .test()
                 .verbose();
 
         if (useJsonOutput || generateHtmlReport) {
@@ -124,6 +125,7 @@ public class GoRunner {
         Optional<CommandResponse> maybeCommandResponse = GoClient
                 .GoClientBuilder
                 .newBuilder(terraTestsPath)
+                .test()
                 .compile()
                 .build()
                 .runWithExtraArgs(arguments);

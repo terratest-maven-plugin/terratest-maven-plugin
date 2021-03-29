@@ -59,7 +59,6 @@ public class GoClient {
             this.terraTestPath = terraTestPath;
             commands = new ArrayList<>();
             commands.add(goRuntime.runtime(goVersion));
-            commands.add(goRuntime.test(goVersion));
         }
 
         public GoClientBuilder verbose() {
@@ -69,6 +68,11 @@ public class GoClient {
 
         public GoClientBuilder compile() {
             commands.add(goRuntime.compile(goVersion));
+            return this;
+        }
+
+        public GoClientBuilder test() {
+            commands.add(goRuntime.test(goVersion));
             return this;
         }
 

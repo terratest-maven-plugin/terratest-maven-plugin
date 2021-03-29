@@ -17,7 +17,6 @@
             <plugin>
                 <groupId>com.github.terratest-maven-plugin</groupId>
                 <artifactId>terratest-maven-plugin</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
                 <configuration>
                     <terraTestPath>${project.baseDir}/docker-test</terraTestPath>
                 </configuration>
