@@ -7,18 +7,22 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.terratest.utils.FileUtils.writeToFile;
 
 /**
  * Abstraction over the Go client.
  */
 public class GoRunner {
 
+    private static final String TERRATEST_OUTPUT_LOG = "terratest-output.log";
+    private static final String TERRATEST_ERROR_OUTPUT_LOG = "terratest-error-output.log";
     private final String terraTestsPath;
     private final Log logger;
     private final boolean useJsonOutput;
@@ -58,7 +62,7 @@ public class GoRunner {
         if (maybeCommandResponse.isPresent()) {
             CommandResponse commandResponse = maybeCommandResponse.get();
             if (commandResponse.isSuccess() && commandResponse.hasStdOut()) {
-                logger.info("Go version: " + commandResponse.getStdOut().get(0).trim());
+                logger.info("Go runtime is present");
             }
         } else {
             throw new MojoExecutionException("Can't find go runtime");
@@ -99,11 +103,11 @@ public class GoRunner {
                 runSuccessful = true;
                 logger.info("Go Test: OK");
             }
+            generateLogfiles(commandResponse);
+            generateHtmlReport(commandResponse);
         } else {
             errorMessages = "Can't run go test";
         }
-        generateLogfiles(maybeCommandResponse);
-        generateHtmlReport(maybeCommandResponse);
 
         if (!runSuccessful) {
             throw new MojoFailureException(errorMessages);
@@ -131,20 +135,8 @@ public class GoRunner {
             if (!commandResponse.isSuccess()) {
                 throw new MojoFailureException("Failed to compile go test(s)");
             } else {
-                logger.info("Go tests successfully compiled");
+                logger.info("Go tests compiled OK");
             }
-        }
-    }
-
-    private void writeToFile(List<String> content, String fileName) {
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-             BufferedWriter writer = new BufferedWriter(osw)) {
-            for (String str : content) {
-                writer.write(str + System.lineSeparator());
-            }
-        } catch (IOException e) {
-            logger.error("Can't save result to logfile: ", e);
         }
     }
 
@@ -179,7 +171,7 @@ public class GoRunner {
          */
         public GoRunnerBuilder withTerraTestPath(final String terraTestsPath) {
             if(!Paths.get(terraTestsPath).isAbsolute()) {
-                throw new IllegalArgumentException("terraTestPath mus be absolute");
+                throw new IllegalArgumentException("terraTestPath must be absolute");
             }
             this.terraTestsPath = terraTestsPath;
             return this;
@@ -283,22 +275,20 @@ public class GoRunner {
         }
     }
 
-    private void generateHtmlReport(Optional<CommandResponse> maybeCommandResponse) throws IOException {
-        if (generateHtmlReport && maybeCommandResponse.isPresent()) {
-            logger.info("Generating HTML repo to: " + terraTestsPath);
-            final CommandResponse commandResponse = maybeCommandResponse.get();
-            HtmlReportGenerator.generateReport(commandResponse.getStdOut(), terraTestsPath);
+    private void generateHtmlReport(CommandResponse commandResponse) throws IOException {
+        if (generateHtmlReport) {
+            logger.info("Generating HTML report to: " + terraTestsPath);
+            HtmlReportGenerator.generateReport(commandResponse.getFullStdOut(), terraTestsPath);
         }
     }
 
-    private void generateLogfiles(Optional<CommandResponse> maybeCommandResponse) {
-        if (createLogFile && maybeCommandResponse.isPresent()) {
+    private void generateLogfiles(CommandResponse commandResponse) {
+        if (createLogFile) {
             logger.info("Generating log files to: " + terraTestsPath);
-            final CommandResponse commandResponse = maybeCommandResponse.get();
             writeToFile(commandResponse.getStdOut(),
-                    terraTestsPath + File.separator + "terratest-output.log");
+                    terraTestsPath + File.separator + TERRATEST_OUTPUT_LOG);
             writeToFile(commandResponse.getStdErr(),
-                    terraTestsPath + File.separator + "terratest-error-output.log");
+                    terraTestsPath + File.separator + TERRATEST_ERROR_OUTPUT_LOG);
         }
     }
 
