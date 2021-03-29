@@ -8,6 +8,8 @@ You can use this plugin to run all your go tests, it has no explicit dependency 
 
 [![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=shield)](https://circleci.com/github/terratest-maven-plugin)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.terratest-maven-plugin/terratest-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.terratest-maven-plugin/terratest-maven-plugin)
+
 
 ## Usage
 Include in your <code>pom.xml</code>
