@@ -51,6 +51,9 @@ Include in your <code>pom.xml</code>
     </configuration>
 Sets the working directory for the goal <i>compile</i> or <i>run-tests</i>
 
+## Example
+For examples, check out: [Terratest maven plugin examples](https://github.com/terratest-maven-plugin/terratest-maven-plugin-example) repository.
+
 ## Optional parameters
 
 ### Generating logs
