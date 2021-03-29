@@ -19,7 +19,7 @@ Include in your <code>pom.xml</code>
                 <plugin>
                     <groupId>com.github.terratest-maven-plugin</groupId>
                     <artifactId>terratest-maven-plugin</artifactId>
-                    <version>1.0.0</version>
+                    <version>1.0.1</version>
                     <configuration>
                         <terraTestPath>{[ABSOLUTE-PATH-TO-TERRATESTS]}</terraTestPath>
                     </configuration>
