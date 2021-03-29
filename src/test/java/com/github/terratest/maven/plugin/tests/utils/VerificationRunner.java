@@ -3,6 +3,8 @@ package com.github.terratest.maven.plugin.tests.utils;
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.apache.maven.it.util.ResourceExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.util.function.Consumer;
 import static org.junit.Assert.*;
 
 public class VerificationRunner {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VerificationRunner.class);
 
     public static void runVerification(File testDir,
                                        Consumer<Verifier> verificationMethod) {
@@ -61,10 +65,11 @@ public class VerificationRunner {
             try {
                 verifier.executeGoals(arguments);
             } catch (VerificationException e) {
+                LOGGER.warn(e.getMessage());
                 // Just because exit code is non-zero,
                 // we still want to verify with verificationMethod
                 if (!e.getMessage().contains("Exit code was non-zero")) {
-                    System.out.println("Error: Exit code was non-zero:" + e);
+                    LOGGER.error("Exit code was non-zero: ", e);
                     throw e;
                 }
             }
