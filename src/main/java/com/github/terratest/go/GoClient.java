@@ -1,8 +1,8 @@
 package com.github.terratest.go;
 
 import com.github.terratest.go.runtime.CommandWithPriority;
-import io.jinfra.testing.CommandResponse;
-import io.jinfra.testing.ProcessRunner;
+import com.github.terratest.process.CommandResponse;
+import com.github.terratest.process.ProcessRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
