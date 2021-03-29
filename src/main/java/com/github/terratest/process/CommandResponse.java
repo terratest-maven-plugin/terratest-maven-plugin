@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-//TODO: Create builder
 public class CommandResponse {
 
     private final List<String> stdOut;
@@ -37,6 +36,14 @@ public class CommandResponse {
 
     public Integer getProcessResultCode() {
         return processResultCode;
+    }
+
+    public boolean isSuccess() {
+        return Integer.valueOf(0).equals(processResultCode);
+    }
+
+    public boolean hasStdOut() {
+        return stdOut != null && !stdOut.isEmpty();
     }
 
     @Override
