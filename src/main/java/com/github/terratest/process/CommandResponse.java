@@ -1,8 +1,8 @@
 package com.github.terratest.process;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CommandResponse {
 
@@ -18,12 +18,6 @@ public class CommandResponse {
         this.stdOut = stdOut;
         this.stdErr = stdErr;
         this.processResultCode = processResultCode;
-    }
-
-    public CommandResponse(Integer processResultCode) {
-        this.processResultCode = processResultCode;
-        this.stdOut = Collections.emptyList();
-        this.stdErr = Collections.emptyList();
     }
 
     public List<String> getStdOut() {
@@ -46,11 +40,21 @@ public class CommandResponse {
         return stdOut != null && !stdOut.isEmpty();
     }
 
+    public String getFullStdOut() {
+        return stdOut
+                .stream()
+                .collect(Collectors.joining(System.lineSeparator()));
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CommandResponse that = (CommandResponse) o;
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        CommandResponse that = (CommandResponse) object;
         return Objects.equals(getStdOut(), that.getStdOut())
                 && Objects.equals(getStdErr(), that.getStdErr())
                 && Objects.equals(getProcessResultCode(), that.getProcessResultCode());
@@ -58,7 +62,9 @@ public class CommandResponse {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStdOut(), getStdErr(), getProcessResultCode());
+        return Objects.hash(getStdOut(),
+                getStdErr(),
+                getProcessResultCode());
     }
 
     @Override

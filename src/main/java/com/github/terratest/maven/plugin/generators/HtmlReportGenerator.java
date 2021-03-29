@@ -21,11 +21,10 @@ import java.util.stream.Collectors;
 public class HtmlReportGenerator {
 
     private static final ObjectReader OBJECT_READER;
-
     private static final String HTML_TEMPLATE_PATH = "html-report-template";
-
     private static final MustacheFactory MUSTACHE_FACTORY = new DefaultMustacheFactory();
     private static final String TEMPLATE_FILE = "index.mustache";
+    private static final String HTML_REPORT = "index.html";
 
     private HtmlReportGenerator() {}
 
@@ -35,7 +34,7 @@ public class HtmlReportGenerator {
         OBJECT_READER = objectMapper.reader();
     }
 
-    public static void generateReport(List<String> goTestResults, final String path) throws IOException {
+    public static void generateReport(String goTestResults, final String path) throws IOException {
         Instant start = Instant.now();
         if (goTestResults == null
                 || goTestResults.isEmpty()
@@ -44,8 +43,11 @@ public class HtmlReportGenerator {
             throw new IllegalArgumentException();
         }
 
+        //Needs to be got as a String and then
+        // separate again as some process send it as multiple lines some
+        // as one big chunk of string
         String[] lines = StringUtils
-                .split(goTestResults.get(0), System.lineSeparator());
+                .split(goTestResults, System.lineSeparator());
 
         Map<String, List<GoTestLine>> rawGoTests = new HashMap<>();
         for (String goTestResult : lines) {
@@ -76,7 +78,7 @@ public class HtmlReportGenerator {
         final long runTime = Duration.between(start,end).toMillis();
         final PrintWriter printWriter = new PrintWriter(new BufferedWriter(
                 new OutputStreamWriter(
-                        new FileOutputStream(path + File.separator + "index.html"),
+                        new FileOutputStream(path + File.separator + HTML_REPORT),
                         StandardCharsets.UTF_8.name())));
         mustache.execute(printWriter, new GoTestWrapper(goTests,runTime)).flush();
     }
