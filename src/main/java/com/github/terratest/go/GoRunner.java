@@ -57,8 +57,7 @@ public class GoRunner {
 
         if (maybeCommandResponse.isPresent()) {
             CommandResponse commandResponse = maybeCommandResponse.get();
-            if (Integer.valueOf(0).equals(commandResponse.getProcessResultCode())
-                    && !commandResponse.getStdOut().isEmpty()) {
+            if (commandResponse.isSuccess() && commandResponse.hasStdOut()) {
                 logger.info("Go version: " + commandResponse.getStdOut().get(0).trim());
             }
         } else {
@@ -94,7 +93,7 @@ public class GoRunner {
         String errorMessages = null;
         if (maybeCommandResponse.isPresent()) {
             CommandResponse commandResponse = maybeCommandResponse.get();
-            if (!Integer.valueOf(0).equals(commandResponse.getProcessResultCode())) {
+            if (!commandResponse.isSuccess()) {
                 errorMessages = "There are failing terratests";
             } else {
                 runSuccessful = true;
@@ -129,7 +128,7 @@ public class GoRunner {
             throw new MojoExecutionException("Couldn't compile go test(s)");
         } else {
             final CommandResponse commandResponse = maybeCommandResponse.get();
-            if (!Integer.valueOf(0).equals(commandResponse.getProcessResultCode())) {
+            if (!commandResponse.isSuccess()) {
                 throw new MojoFailureException("Failed to compile go test(s)");
             } else {
                 logger.info("Go tests successfully compiled");
