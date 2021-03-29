@@ -1,5 +1,7 @@
-package com.github.terratest.maven.plugin;
+package com.github.terratest.maven.plugin.utils;
 
+import com.github.terratest.maven.plugin.TerraTestCompileMojo;
+import com.github.terratest.maven.plugin.TerraTestRunnerMojo;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 

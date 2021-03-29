@@ -1,5 +1,7 @@
 package com.github.terratest.maven.plugin;
 
+import com.github.terratest.go.GoRunner;
+import com.github.terratest.maven.plugin.utils.AbstractTerraTestMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -16,7 +18,7 @@ public class TerraTestCompileMojo extends AbstractTerraTestMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        GoClient goClient = GoClient.GoClientBuilder.newBuilder()
+        GoRunner goRunner = GoRunner.GoRunnerBuilder.newBuilder()
                 .useJsonOutput(isUseJsonOutput())
                 .createLogFile(isCreateLogFile())
                 .withTerraTestPath(getTerraTestPath())
@@ -24,7 +26,7 @@ public class TerraTestCompileMojo extends AbstractTerraTestMojo {
                 .withLogger(getLog())
                 .build();
         Instant start = Instant.now();
-        goClient.compileGoTests();
+        goRunner.compileGoTests();
         Instant end = Instant.now();
         final long duration = Duration.between(start,end).toMillis();
         getLog().info("Go tests have been successfully compiled in " + duration + "ms.");

@@ -1,4 +1,4 @@
-package com.github.terratest.maven.plugin.go.test.result;
+package com.github.terratest.go.result;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
