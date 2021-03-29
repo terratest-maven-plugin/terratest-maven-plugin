@@ -1,5 +1,7 @@
 package com.github.terratest.maven.plugin;
 
+import com.github.terratest.go.GoRunner;
+import com.github.terratest.maven.plugin.utils.AbstractTerraTestMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -47,7 +49,7 @@ public class TerraTestRunnerMojo extends AbstractTerraTestMojo{
             getLog().info("Skipping terratest run");
             return;
         }
-        GoClient goClient = GoClient.GoClientBuilder.newBuilder()
+        GoRunner goRunner = GoRunner.GoRunnerBuilder.newBuilder()
                 .useJsonOutput(isUseJsonOutput())
                 .createLogFile(isCreateLogFile())
                 .disableCaching(disableTestCaching)
@@ -59,11 +61,11 @@ public class TerraTestRunnerMojo extends AbstractTerraTestMojo{
         try {
             final String terraTestsPath = getTerraTestPath();
             getLog().info("TerraTest path: " + terraTestsPath);
-            goClient.checkGoPresence();
+            goRunner.checkGoPresence();
             if (!Files.isDirectory(Paths.get(terraTestsPath))) {
                 throw new MojoExecutionException("Can't find terratest basedir.");
             }
-            goClient.runGoTest();
+            goRunner.runGoTest();
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage());
         }
