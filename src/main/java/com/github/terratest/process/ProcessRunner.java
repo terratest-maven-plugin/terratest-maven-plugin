@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -19,13 +18,6 @@ import java.util.function.Consumer;
 public class ProcessRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessRunner.class);
-
-    public static Optional<CommandResponse> runCommand(List<String> commands) {
-        return runCommand(commands,
-                null,
-                LOGGER::info,
-                LOGGER::error);
-    }
 
     public static Optional<CommandResponse> runCommand(List<String> commands,
                                                        File directory,
@@ -91,23 +83,5 @@ public class ProcessRunner {
                 throw new RuntimeException("problem with executing program", e);
             }
         });
-    }
-
-    public static List<String> createCommandList(Object... objects) {
-        List<String> commands = new ArrayList<>();
-
-        for (Object object : objects) {
-            if (object instanceof String) {
-                commands.add((String) object);
-            } else if (object instanceof Collection) {
-                for (Object objectElement : (Collection) object) {
-                    if (objectElement instanceof String) {
-                        commands.add((String) objectElement);
-                    }
-                }
-            }
-        }
-
-        return commands;
     }
 }

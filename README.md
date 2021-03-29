@@ -1,7 +1,7 @@
 # terratest-maven-plugin
 
 This is a Maven plugin for running [Terratest](https://terratest.gruntwork.io)s or any go test in your repository.
-Terratest is used to create infrastructure tests with popular languange go. With this plugin you can run these tests, creat HTML reports
+Terratest is used to create infrastructure tests with popular language go. With this plugin you can run these tests, create HTML reports
 out of the box with your beloved maven build pipeline.
 You can use this plugin to run all your go tests, it has no explicit dependency on terratest.
 
@@ -95,7 +95,7 @@ terratest-maven-plugin integrates with the widely used <code>-DskipTests</code>,
 
     mvn clean install -DskipTests
 your terratests won't run.
-Of course you can set it directly in the plugin/pluginManagement section:
+Of course, you can set it directly in the plugin/pluginManagement section:
 
     <configuration>
     ...
@@ -123,7 +123,7 @@ If you want to change this behaviour, use the <code>phase</code> parameter in ex
 
 ### Disable test caching
 <i>Only used in run-tests goal</i><br>
-Go can use a mechanics called test caching. This is enabled by default but you can switch it off by using the following parameter:
+Go can use a mechanics called test caching. This is enabled by default, but you can switch it off by using the following parameter:
 
     <configuration>
     ...
@@ -146,7 +146,7 @@ use the following parameter:
 For full reference of the arguments you can use with go test, see the [Go test reference](https://golang.org/pkg/cmd/go/internal/test/)
 
 ## Contribution
-If you'd like to contribute, please feel free. This is an MIT licenced application so you can use it, extends it however you want. :)
+If you'd like to contribute, please feel free. This is an MIT licenced application, so you can use it, extends it however you want. :)
 
 ### Build the project
 Clone this project.
