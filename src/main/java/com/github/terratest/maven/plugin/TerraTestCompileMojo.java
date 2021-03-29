@@ -26,6 +26,7 @@ public class TerraTestCompileMojo extends AbstractTerraTestMojo {
                 .withLogger(getLog())
                 .build();
         Instant start = Instant.now();
+        goRunner.checkGoPresence();
         goRunner.compileGoTests();
         Instant end = Instant.now();
         final long duration = Duration.between(start,end).toMillis();
