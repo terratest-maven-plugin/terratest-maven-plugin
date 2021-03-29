@@ -2,7 +2,7 @@ package com.github.terratest.go;
 
 import com.github.terratest.maven.plugin.generators.HtmlReportGenerator;
 import com.github.terratest.maven.plugin.utils.AbstractTerraTestMojo;
-import io.jinfra.testing.CommandResponse;
+import com.github.terratest.process.CommandResponse;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
