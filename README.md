@@ -110,7 +110,7 @@ Of course, you can set it directly in the plugin/pluginManagement section:
 The effect will be the same. If you want to compile your go tests even if tests are disabled use the <code>terratest:compile</code> goal, for example like this:
 
     <plugin>
-        <groupId>io.jinfra</groupId>
+        <groupId>com.github.terratest-maven-plugin</groupId>
         <artifactId>terratest-maven-plugin</artifactId>
         <configuration>
             <terraTestPath>${project.basedir}/docker-test</terraTestPath>
