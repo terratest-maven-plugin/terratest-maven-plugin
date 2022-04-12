@@ -82,7 +82,7 @@ public class ProcessRunner {
     	}
     	
     	String timeoutWithUnit = timeout.get(0).split("=")[1];
-    	String timeoutValue = timeoutWithUnit.substring(0, timeoutWithUnit.length()-2);
+    	String timeoutValue = timeoutWithUnit.substring(0, timeoutWithUnit.length()-1);
     	String timeoutUnit = timeoutWithUnit.substring(timeoutWithUnit.length()-1);
     	
     	if (timeoutUnit.equals("m")) {

@@ -67,4 +67,10 @@ public class TerraTestRunnerMojoIT {
         File testDir = getTestProject(TestResource.MISSING_DOCKERFILE);
         assertMissingDockerfile(testDir);
     }
+    
+    @Test
+    public void testTimeoutOverride() {
+        File testDir = getTestProject(TestResource.TIMEOUT_OVERRIDE);
+        assertNoErrorHasBeenReported(testDir);
+    }
 }
