@@ -1,0 +1,36 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>terratest-maven-plugin-test-parent</artifactId>
+        <groupId>com.github.terratest-maven-plugin</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>terratest-maven-plugin-timeout-override-test-report-maven-project</artifactId>
+
+    <name>Terratest Maven plugin | TIMEOUT OVERRIDE TEST REPORT MAVEN PROJECT</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.terratest-maven-plugin</groupId>
+                <artifactId>terratest-maven-plugin</artifactId>
+                <configuration>
+                    <terraTestPath>${project.basedir}/docker-test</terraTestPath>
+                    <arguments>
+						<param>-timeout=30m</param>
+					</arguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run-tests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

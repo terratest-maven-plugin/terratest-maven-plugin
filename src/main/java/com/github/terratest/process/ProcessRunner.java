@@ -1,5 +1,6 @@
 package com.github.terratest.process;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class ProcessRunner {
 
@@ -48,9 +50,10 @@ public class ProcessRunner {
                 return stdout;
             });
 
-            resultFut.get(10, TimeUnit.MINUTES);
+            ProcessTimeout timeout = determineTimeoutSettings(commands);
+            resultFut.get(timeout.getTimeoutValue(), timeout.getTimeUnit());
 
-            if (process.waitFor(10, TimeUnit.MINUTES)) {
+            if (process.waitFor(timeout.getTimeoutValue(), timeout.getTimeUnit())) {
                 Integer exitValue = process.exitValue();
                 final CommandResponse commandResponse
                         = new CommandResponse(stdOut, stdErr, exitValue);
@@ -67,7 +70,33 @@ public class ProcessRunner {
         }
     }
 
-    static CompletableFuture<String> readOutStream(InputStream is) {
+    private static ProcessTimeout determineTimeoutSettings(List<String> commands) {
+    	List<String> timeout = commands
+                .stream()
+                .filter(x -> x.contains("timeout"))
+                .collect(Collectors.toList());
+    	
+    	if (CollectionUtils.isEmpty(timeout)) {
+    		LOGGER.info("No timeout override provided so using default of 10 minutes");
+    		return new ProcessTimeout(10, TimeUnit.MINUTES);
+    	}
+    	
+    	String timeoutWithUnit = timeout.get(0).split("=")[1];
+    	String timeoutValue = timeoutWithUnit.substring(0, timeoutWithUnit.length()-1);
+    	String timeoutUnit = timeoutWithUnit.substring(timeoutWithUnit.length()-1);
+    	
+    	if (timeoutUnit.equals("m")) {
+    		LOGGER.info(String.format("Timeout override set to %s minutes", timeoutValue));
+    		return new ProcessTimeout(Long.parseLong(timeoutValue), TimeUnit.MINUTES);
+    	} else if (timeoutUnit.equals("h")) {
+    		LOGGER.info(String.format("Timeout override set to %s hours", timeoutValue));
+    		return new ProcessTimeout(Long.parseLong(timeoutValue), TimeUnit.HOURS);
+    	} else {
+    		throw new RuntimeException(String.format("Unsupported timeout unit: %s", timeoutUnit));
+    	}
+	}
+
+	static CompletableFuture<String> readOutStream(InputStream is) {
         return CompletableFuture.supplyAsync(() -> {
             try (
                     InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
